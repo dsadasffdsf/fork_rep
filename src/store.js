@@ -3,7 +3,16 @@
  */
 class Store {
   constructor(initState = {}) {
-    this.state = initState;
+    const updatedList = [
+      ...initState.list.map(item => {
+        return { ...item, selection: 0, selected: false };
+      }),
+    ];
+
+    this.state = {
+      list: [...updatedList],
+      listLength: initState.list.length + 1,
+    };
     this.listeners = []; // Слушатели изменений состояния
   }
 
@@ -14,6 +23,7 @@ class Store {
    */
   subscribe(listener) {
     this.listeners.push(listener);
+
     // Возвращается функция для удаления добавленного слушателя
     return () => {
       this.listeners = this.listeners.filter(item => item !== listener);
@@ -34,6 +44,7 @@ class Store {
    */
   setState(newState) {
     this.state = newState;
+
     // Вызываем всех слушателей
     for (const listener of this.listeners) listener();
   }
@@ -44,8 +55,14 @@ class Store {
   addItem() {
     this.setState({
       ...this.state,
-      list: [...this.state.list, { code: this.state.list.length + 1, title: 'Новая запись' }],
+      list: [
+        ...this.state.list,
+        { code: this.state.listLength, title: 'Новая запись', selection: 0, selected: false },
+      ],
+      listLength: this.state.listLength + 1,
     });
+    // console.log(Store.getState().listLength);
+    console.log(this.state.listLength);
   }
 
   /**
@@ -68,7 +85,12 @@ class Store {
       ...this.state,
       list: this.state.list.map(item => {
         if (item.code === code) {
+          if (item.selected === false) {
+            item = { ...item, selection: item.selection + 1 };
+          }
           item.selected = !item.selected;
+        } else {
+          item.selected = false;
         }
         return item;
       }),

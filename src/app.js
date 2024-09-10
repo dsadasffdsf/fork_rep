@@ -10,6 +10,7 @@ import './styles.css';
 function App({ store }) {
   const list = store.getState().list;
 
+
   return (
     <div className="App">
       <div className="App-head">
@@ -28,6 +29,14 @@ function App({ store }) {
               >
                 <div className="Item-code">{item.code}</div>
                 <div className="Item-title">{item.title}</div>
+                {item.selection >= 1 ? (
+                  <div className="Item-selection">
+                    Выделяли {item.selection} {[2, 3, 4].includes(item.selection) ? 'раза' : 'раз'}
+                  </div>
+                ) : (
+                  ''
+                )}
+
                 <div className="Item-actions">
                   <button onClick={() => store.deleteItem(item.code)}>Удалить</button>
                 </div>
