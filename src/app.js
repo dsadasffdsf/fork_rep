@@ -1,5 +1,5 @@
 import React from 'react';
-import { createElement } from './utils.js';
+import { createElement, pluralRules } from './utils.js';
 import './styles.css';
 
 /**
@@ -10,6 +10,12 @@ import './styles.css';
 function App({ store }) {
   const list = store.getState().list;
 
+  const deleteItemHandler = (event, item) => {
+    event.stopPropagation();
+    store.deleteItem(item.code);
+  };
+
+  
 
   return (
     <div className="App">
@@ -28,17 +34,19 @@ function App({ store }) {
                 onClick={() => store.selectItem(item.code)}
               >
                 <div className="Item-code">{item.code}</div>
-                <div className="Item-title">{item.title}</div>
-                {item.selection >= 1 ? (
-                  <div className="Item-selection">
-                    Выделяли {item.selection} {[2, 3, 4].includes(item.selection) ? 'раза' : 'раз'}
-                  </div>
-                ) : (
-                  ''
-                )}
+                <div className="Item-title">
+                  {item.title}{' '}
+                  {item.selection >= 1 ? (
+                    <span className="Item-selection">
+                      | Выделяли {item.selection}{pluralRules(item.selection)}
+                    </span>
+                  ) : (
+                    ''
+                  )}
+                </div>
 
                 <div className="Item-actions">
-                  <button onClick={() => store.deleteItem(item.code)}>Удалить</button>
+                  <button onClick={(event) => deleteItemHandler(event,item)}>Удалить</button>
                 </div>
               </div>
             </div>

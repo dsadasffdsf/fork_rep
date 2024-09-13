@@ -26,3 +26,11 @@ export function createElement(name, props = {}, ...children) {
 
   return element;
 }
+
+export function pluralRules(count) {
+  if ([12, 13, 14].includes(count % 100)) {
+    return ' раз';
+  }
+
+  return [2, 3, 4].includes(count % 10) ? ' раза' : ' раз';
+}

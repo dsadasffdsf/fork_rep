@@ -3,15 +3,19 @@
  */
 class Store {
   constructor(initState = {}) {
+    let listLength = 0;
     const updatedList = [
       ...initState.list.map(item => {
+        if (item.code > listLength) {
+          listLength = item.code;
+        }
         return { ...item, selection: 0, selected: false };
       }),
     ];
 
     this.state = {
       list: [...updatedList],
-      listLength: initState.list.length + 1,
+      listLength: listLength+1,
     };
     this.listeners = []; // Слушатели изменений состояния
   }
