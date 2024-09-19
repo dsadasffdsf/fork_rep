@@ -1,47 +1,47 @@
-import React, { useCallback } from 'react';
-import List from './components/list';
-import Controls from './components/controls';
-import Head from './components/head';
-import PageLayout from './components/page-layout';
+import React, { useCallback, useState } from 'react';
+import List from './components/List';
+import Controls from './components/Controls';
+import Head from './components/Head';
+import PageLayout from './components/PageLayout';
+import { useStore } from './hook/useStore';
+import Modal from './components/Modal';
 
 /**
  * Приложение
  * @param store {Store} Хранилище состояния приложения
  * @returns {React.ReactElement}
  */
-function App({ store }) {
-  const list = store.getState().list;
+function App() {
+  const {
+    state: { list },
+    reducers: { addBasket },
+  } = useStore();
 
-  const callbacks = {
-    onDeleteItem: useCallback(
-      code => {
-        store.deleteItem(code);
-      },
-      [store],
-    ),
-
-    onSelectItem: useCallback(
-      code => {
-        store.selectItem(code);
-      },
-      [store],
-    ),
-
-    onAddItem: useCallback(() => {
-      store.addItem();
-    }, [store]),
-  };
+  const [modal, setModal] = useState(false);
+  const modalHandler = useCallback(() => {
+    setModal(prev => !prev);
+  }, []);
+  const basketHandler = useCallback(
+    item => {
+      addBasket(item);
+    },
+    [addBasket],
+  );
 
   return (
-    <PageLayout>
-      <Head title="Приложение на чистом JS" />
-      <Controls onAdd={callbacks.onAddItem} />
-      <List
-        list={list}
-        onDeleteItem={callbacks.onDeleteItem}
-        onSelectItem={callbacks.onSelectItem}
-      />
-    </PageLayout>
+    <>
+      <PageLayout>
+        <Head title="Приложение на чистом JS" />
+        <Controls valueHandler={modal} handler={modalHandler} titleHandler="Перейти" />
+        <List
+          list={list}
+          handler={basketHandler}
+          emptyListTitle={'Товар не обнаружен'}
+          titleHandler={'Добавить'}
+        />
+      </PageLayout>
+      {modal ? <Modal valueHandler={modal} handler={modalHandler} /> : ''}
+    </>
   );
 }
 

@@ -1,3 +1,4 @@
+import item from './components/Item';
 import { generateCode } from './utils';
 
 /**
@@ -5,8 +6,17 @@ import { generateCode } from './utils';
  */
 class Store {
   constructor(initState = {}) {
-    this.state = initState;
+    const updateInitState = [
+      ...initState.list.map(item => {
+        return { ...item, count: 0 };
+      }),
+    ];
+    this.state = { list: updateInitState, basketList: [], basketCount: 0, totalPrice: 0 };
     this.listeners = []; // Слушатели изменений состояния
+
+    //привязка к store для работы контекста
+    this.addBasket = this.addBasket.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
   }
 
   /**
@@ -49,16 +59,45 @@ class Store {
       list: [...this.state.list, { code: generateCode(), title: 'Новая запись' }],
     });
   }
+  addBasket(actionItem) {
+    // Проверка на повторный товар
 
+    const rep = this.state.basketList.some(item => {
+      return item.code === actionItem.code;
+    });
+
+    if (rep) {
+      this.setState({
+        ...this.state,
+        basketList: this.state.basketList.map(item => {
+          if (item.code === actionItem.code) {
+            return { ...item, count: item.count + 1 };
+          }
+          return item;
+        }),
+        totalPrice: this.state.totalPrice + Number(actionItem.price),
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        basketList: [...this.state.basketList, { ...actionItem, count: 1 }],
+        basketCount: this.state.basketCount + 1,
+        totalPrice: this.state.totalPrice + Number(actionItem.price),
+      });
+    }
+  }
   /**
    * Удаление записи по коду
    * @param code
    */
   deleteItem(code) {
+    let item = this.state.basketList.find(item => item.code === code);
     this.setState({
       ...this.state,
       // Новый список, в котором не будет удаляемой записи
-      list: this.state.list.filter(item => item.code !== code),
+      totalPrice: Number(this.state.totalPrice) - Number(item.price * item.count),
+      basketList: this.state.basketList.filter(item => item.code !== code),
+      basketCount: this.state.basketCount - 1,
     });
   }
 
@@ -66,23 +105,6 @@ class Store {
    * Выделение записи по коду
    * @param code
    */
-  selectItem(code) {
-    this.setState({
-      ...this.state,
-      list: this.state.list.map(item => {
-        if (item.code === code) {
-          // Смена выделения и подсчёт
-          return {
-            ...item,
-            selected: !item.selected,
-            count: item.selected ? item.count : item.count + 1 || 1,
-          };
-        }
-        // Сброс выделения если выделена
-        return item.selected ? { ...item, selected: false } : item;
-      }),
-    });
-  }
 }
 
 export default Store;

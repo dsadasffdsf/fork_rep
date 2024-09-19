@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { generateCode } from './utils.js';
 import App from './app.js';
 import Store from './store.js';
+import { StoreProvider } from './hoc/StoreContext.js';
+import './styles/style.css';
 
 const store = new Store({
   list: [
@@ -18,9 +20,8 @@ const store = new Store({
 
 const root = createRoot(document.getElementById('root'));
 
-store.subscribe(() => {
-  root.render(<App store={store} />);
-});
-
-// Первый рендер приложения
-root.render(<App store={store} />);
+root.render(
+  <StoreProvider store={store}>
+    <App />
+  </StoreProvider>,
+);
