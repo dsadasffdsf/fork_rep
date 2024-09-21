@@ -1,4 +1,4 @@
-import item from './components/Item';
+import item from './components/Items/Item';
 import { generateCode } from './utils';
 
 /**
@@ -59,8 +59,10 @@ class Store {
       list: [...this.state.list, { code: generateCode(), title: 'Новая запись' }],
     });
   }
-  addBasket(actionItem) {
+  addBasket(code) {
     // Проверка на повторный товар
+
+    const actionItem = this.state.list.find(item => item.code === code);
 
     const rep = this.state.basketList.some(item => {
       return item.code === actionItem.code;

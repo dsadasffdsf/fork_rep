@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { formattedPrice } from '../../utils';
 
-function Item({ item, handler, titleHandler }) {
-  const { code, title, price, count } = item;
+function Item({ item, handler }) {
+  const { code, title, price } = item;
+  const newPriceForm = formattedPrice(price);
 
   return (
     <div className={'Item'}>
@@ -10,13 +12,14 @@ function Item({ item, handler, titleHandler }) {
       <div className="Item-title">
         {title}{' '}
         <div className="Item-information">
-          <div>{price} ₽</div>
-          {titleHandler == 'Удалить' ? <div>{count} шт</div> : ''}
+          <div>{newPriceForm}</div>
         </div>
       </div>
 
       <div className="Item-actions">
-        <button onClick={() => handler(item)}>{titleHandler}</button>
+        <button className="btn" onClick={() => handler(item)}>
+          Добавить
+        </button>
       </div>
     </div>
   );

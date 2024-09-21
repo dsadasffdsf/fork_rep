@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useStore } from '../hook/useStore';
-import { plural } from '../utils';
+import { formattedPrice, plural } from '../utils';
 
 function Controls({ valueHandler, handler, titleHandler }) {
   const {
@@ -15,6 +15,7 @@ function Controls({ valueHandler, handler, titleHandler }) {
     many: 'товаров',
     other: 'товаров',
   };
+  const newPriceForm = formattedPrice(totalPrice);
 
   return (
     <>
@@ -27,14 +28,16 @@ function Controls({ valueHandler, handler, titleHandler }) {
 
             <div className="basket_info-price">
               {basketCount === 0
-                ? 'В корзине пусто'
-                : `${basketCount} ${plural(basketCount, itemVariants)} / ${totalPrice} ₽`}
+                ? 'пусто'
+                : `${basketCount} ${plural(basketCount, itemVariants)} / ${newPriceForm}`}
             </div>
           </>
         )}
 
         <div className={`Controls ${valueHandler ? 'Controls_close-modal' : ''}`}>
-          <button onClick={() => handler(!valueHandler)}>{titleHandler}</button>
+          <button className="btn" onClick={() => handler(!valueHandler)}>
+            {titleHandler}
+          </button>
         </div>
       </div>
     </>

@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Item from './Item';
+import Item from './Items/Item';
 
-function List({ list, emptyListTitle, handler, titleHandler }) {
+function List({ list, emptyListTitle, children }) {
   return (
     <div className={`List ${list.length == 0 ? 'List-empty' : ''}`}>
       {list.length > 0 ? (
         list.map(item => (
           <div key={item.code} className="List-item">
-            <Item item={item} handler={handler} titleHandler={titleHandler} />
+            {children(item)}
           </div>
         ))
       ) : (

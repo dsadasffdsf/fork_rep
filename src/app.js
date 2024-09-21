@@ -2,9 +2,11 @@ import React, { useCallback, useState } from 'react';
 import List from './components/List';
 import Controls from './components/Controls';
 import Head from './components/Head';
-import PageLayout from './components/PageLayout';
+import PageLayout from './components/Layouts/PageLayout';
 import { useStore } from './hook/useStore';
 import Modal from './components/Modal';
+import ItemBasket from './components/Items/ItemBasket';
+import Item from './components/Items/Item';
 
 /**
  * Приложение
@@ -23,7 +25,7 @@ function App() {
   }, []);
   const basketHandler = useCallback(
     item => {
-      addBasket(item);
+      addBasket(item.code);
     },
     [addBasket],
   );
@@ -31,14 +33,11 @@ function App() {
   return (
     <>
       <PageLayout>
-        <Head title="Приложение на чистом JS" />
+        <Head title="Магазин" />
         <Controls valueHandler={modal} handler={modalHandler} titleHandler="Перейти" />
-        <List
-          list={list}
-          handler={basketHandler}
-          emptyListTitle={'Товар не обнаружен'}
-          titleHandler={'Добавить'}
-        />
+        <List list={list} emptyListTitle={'Товар не обнаружен'}>
+          {item => <Item item={item} handler={basketHandler} />}
+        </List>
       </PageLayout>
       {modal ? <Modal valueHandler={modal} handler={modalHandler} /> : ''}
     </>

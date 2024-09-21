@@ -4,6 +4,10 @@ import Controls from './Controls';
 import { useStore } from '../hook/useStore';
 import List from './List';
 import PropTypes from 'prop-types';
+import { formattedPrice } from '../utils';
+import ModalLayout from './Layouts/ModalLayout';
+import Item from './Items/Item';
+import ItemBasket from './Items/ItemBasket';
 
 function Modal({ handler, valueHandler }) {
   const {
@@ -16,23 +20,16 @@ function Modal({ handler, valueHandler }) {
     },
     [deleteItem],
   );
+  const newPriceForm = formattedPrice(totalPrice);
   return (
     <>
-      <div className="modal">
+      <ModalLayout newPriceForm={newPriceForm}>
         <Head title="Корзина" />
         <Controls handler={handler} valueHandler={valueHandler} titleHandler="Закрыть" />
-        <List
-          list={basketList}
-          emptyListTitle={'Корзина пуста'}
-          handler={deleteHandler}
-          titleHandler={'Удалить'}
-        />
-        <div className="basket_info-price modal_result">
-          <div>Итого </div>
-          <div>{totalPrice} ₽</div>
-        </div>
-      </div>
-      <div className="modal__wrapper"></div>
+        <List list={basketList} emptyListTitle={'Корзина пуста'}>
+          {item => <ItemBasket item={item} handler={deleteHandler} />}
+        </List>
+      </ModalLayout>
     </>
   );
 }
