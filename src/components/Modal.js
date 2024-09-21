@@ -6,8 +6,8 @@ import List from './List';
 import PropTypes from 'prop-types';
 import { formattedPrice } from '../utils';
 import ModalLayout from './Layouts/ModalLayout';
-import Item from './Items/Item';
 import ItemBasket from './Items/ItemBasket';
+import FinalPrice from './FinalPrice';
 
 function Modal({ handler, valueHandler }) {
   const {
@@ -23,12 +23,13 @@ function Modal({ handler, valueHandler }) {
   const newPriceForm = formattedPrice(totalPrice);
   return (
     <>
-      <ModalLayout newPriceForm={newPriceForm}>
+      <ModalLayout>
         <Head title="Корзина" />
         <Controls handler={handler} valueHandler={valueHandler} titleHandler="Закрыть" />
         <List list={basketList} emptyListTitle={'Корзина пуста'}>
           {item => <ItemBasket item={item} handler={deleteHandler} />}
         </List>
+        <FinalPrice newPriceForm={newPriceForm} />
       </ModalLayout>
     </>
   );
