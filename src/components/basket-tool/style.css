@@ -13,3 +13,9 @@
   font-weight: bold;
   margin: 0 20px;
 }
+.BasketTool-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 20px;
+}

@@ -8,7 +8,10 @@ function Item(props) {
   const cn = bem('Item');
 
   const callbacks = {
-    onAdd: e => props.onAdd(props.item._id),
+    onAdd: (e) => {
+      e.preventDefault();
+      props.onAdd(props.item._id);
+    },
   };
 
   return (

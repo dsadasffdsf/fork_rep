@@ -2,14 +2,15 @@ import { memo } from 'react';
 import PropTypes from 'prop-types';
 import Item from '../item';
 import './style.css';
+import { Link } from 'react-router-dom';
 
 function List({ list, renderItem }) {
   return (
     <div className="List">
-      {list.map(item => (
-        <div key={item._id} className="List-item">
-          {renderItem(item)}
-        </div>
+      {list.map((item) => (
+        <Link to={`/products/${item._id}`} state={item._id} key={item._id}>
+          <div className="List-item">{renderItem(item)}</div>
+        </Link>
       ))}
     </div>
   );
@@ -25,7 +26,7 @@ List.propTypes = {
 };
 
 List.defaultProps = {
-  renderItem: item => {},
+  renderItem: (item) => {},
 };
 
 export default memo(List);
