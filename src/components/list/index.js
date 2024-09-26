@@ -4,11 +4,11 @@ import Item from '../item';
 import './style.css';
 import { Link } from 'react-router-dom';
 
-function List({ list, renderItem }) {
+function List({ list, renderItem ,onClose}) {
   return (
     <div className="List">
       {list.map((item) => (
-        <Link to={`/products/${item._id}`} state={item._id} key={item._id}>
+        <Link to={`/products/${item._id}`} state={item._id} key={item._id} onClick={onClose}>
           <div className="List-item">{renderItem(item)}</div>
         </Link>
       ))}

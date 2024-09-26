@@ -1,12 +1,7 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
 import Main from './main';
-import Basket from './basket';
-import useStore from '../store/use-store';
-import useSelector from '../store/use-selector';
 import { Route, Routes } from 'react-router-dom';
-import MainPage from './pages/MainPage';
-import DetalPage from './pages/detalPage';
-import Layout from './pages/Layout';
+import DetalPage from './detalPage';
+import Layout from './Layout';
 
 /**
  * Приложение
@@ -17,7 +12,7 @@ function App() {
     <>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<MainPage />}></Route>
+          <Route path="/" element={<Main />}></Route>
           <Route path="/products/:id" element={<DetalPage />}></Route>
         </Route>
       </Routes>

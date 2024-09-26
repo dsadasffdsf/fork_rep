@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Outlet } from 'react-router-dom';
-import BasketProvider from '../../components/basket-provider';
+import BasketProvider from '../components/basket-provider';
 
 const Layout = () => {
   return (

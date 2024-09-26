@@ -4,24 +4,38 @@ import { cn as bem } from '@bem-react/classname';
 import { numberFormat, plural } from '../../utils';
 import './style.css';
 import { Link } from 'react-router-dom';
+import { engDictBasketTool, ruDictBasketTool } from './dict';
 
-function BasketTool({ sum, amount, onOpen }) {
+function BasketTool({ sum, amount, onOpen, language }) {
   const cn = bem('BasketTool');
   return (
     <div className={cn('wrapper')}>
-      <Link to="/">Главная</Link>
+      <Link to="/">
+        <span className={cn('wrapper-redirect')}>
+          {language === 'ru'
+            ? ruDictBasketTool.basketToolToHome
+            : engDictBasketTool.basketToolToHome}
+        </span>
+      </Link>
       <div className={cn()}>
-        <span className={cn('label')}>В корзине:</span>
+        <span className={cn('label')}>
+          {' '}
+          {language === 'ru' ? ruDictBasketTool.basketToolTitle : engDictBasketTool.basketToolTitle}
+        </span>
         <span className={cn('total')}>
           {amount
             ? `${amount} ${plural(amount, {
-                one: 'товар',
-                few: 'товара',
-                many: 'товаров',
+                one: `${language === 'ru' ? ruDictBasketTool.basketToolOneProduct : engDictBasketTool.basketToolOneProduct}`,
+                few: `${language === 'ru' ? ruDictBasketTool.basketToolFewProduct : engDictBasketTool.basketToolManyProducts}`,
+                many: `${language === 'ru' ? ruDictBasketTool.basketToolManyProducts : engDictBasketTool.basketToolManyProducts}`,
               })} / ${numberFormat(sum)} ₽`
-            : `пусто`}
+            : `${language === 'ru' ? ruDictBasketTool.basketToolStatus : engDictBasketTool.basketToolStatus}`}
         </span>
-        <button onClick={onOpen}>Перейти</button>
+        <button onClick={onOpen}>
+          {language === 'ru'
+            ? ruDictBasketTool.basketToolBtnOpen
+            : engDictBasketTool.basketToolBtnOpen}
+        </button>
       </div>
     </div>
   );

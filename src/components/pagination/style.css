@@ -11,6 +11,7 @@
   list-style: none;
   width: 20px;
   height: 20px;
+  padding: 0 2px 0 2px;
 }
 .Pagination-element:hover {
   background: #e1e1e1;

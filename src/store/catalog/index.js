@@ -10,13 +10,20 @@ class Catalog extends StoreModule {
   initState() {
     return {
       list: [],
+      language: 'ru',
     };
+  }
+
+  changeLanguage() {
+    this.setState({
+      ...this.getState(),
+      language: 'eng' === this.store.state.catalog.language ? 'ru' : 'eng',
+    });
   }
 
   async load({ limit = 10, skip = 0 } = {}) {
     const response = await fetch(`/api/v1/articles?limit=${limit}&skip=${skip}}`);
     const json = await response.json();
-    console.log(this);
 
     this.setState(
       {
@@ -37,22 +44,34 @@ class Catalog extends StoreModule {
         maxOrder: json.result.items[0].order,
       },
       'Загружены товары из АПИ',
-      
     );
   }
   async fetchItemById(id) {
-    const response = await fetch(`/api/v1/articles/${id}`);
-    const json = await response.json();
-    console.log(json.result, 'Фетч');
+    const productResponse = await fetch(
+      `/api/v1/articles/${id}?fields=*,madeIn(title),category(title)`,
+    );
+    const productData = await productResponse.json();
+    // console.log(productData.result, '------------------------');
+
+    const productDataForDetal = {
+      _id: productData.result._id,
+      title: productData.result.title,
+      description: productData.result.description,
+      category: productData.result.category.title,
+      country: productData.result.madeIn.title,
+      edition: productData.result.edition,
+      price: productData.result.price,
+    };
 
     this.setState(
       {
         ...this.getState(),
-        detalProduct: json.result,
+        list: [productData.result],
+        detalProduct: productDataForDetal,
       },
       'Загружены товары из АПИ',
-      
     );
+    // console.log(this.store.state.catalog ,"loggggggg");
   }
 }
 

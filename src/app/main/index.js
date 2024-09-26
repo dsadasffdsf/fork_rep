@@ -1,12 +1,13 @@
 import { memo, useCallback, useEffect } from 'react';
 import Item from '../../components/item';
-import PageLayout from '../../components/page-layout';
+import PageLayout from '../../components/layouts/page-layout';
 import Head from '../../components/head';
 import BasketTool from '../../components/basket-tool';
 import List from '../../components/list';
 import useStore from '../../store/use-store';
 import useSelector from '../../store/use-selector';
 import Pagination from '../../components/pagination';
+import { engDictHead, ruDictHead } from './dict';
 
 function Main() {
   const store = useStore();
@@ -25,6 +26,7 @@ function Main() {
     amount: state.basket.amount,
     sum: state.basket.sum,
     maxOrder: state.catalog.maxOrder,
+    language: state.catalog.language,
   }));
 
   const callbacks = {
@@ -32,22 +34,31 @@ function Main() {
     addToBasket: useCallback((_id) => store.actions.basket.addToBasket(_id), [store]),
     // Открытие модалки корзины
     openModalBasket: useCallback(() => store.actions.modals.open('basket'), [store]),
+    changeLanguage: () => store.actions.catalog.changeLanguage(),
   };
 
   const renders = {
     item: useCallback(
       (item) => {
-        return <Item item={item} onAdd={callbacks.addToBasket} />;
+        return <Item item={item} onAdd={callbacks.addToBasket} language={select.language} />;
       },
-      [callbacks.addToBasket],
+      [callbacks.addToBasket, select.language],
     ),
   };
-  console.log(select.maxOrder);
 
   return (
     <PageLayout>
-      <Head title="Магазин" />
-      <BasketTool onOpen={callbacks.openModalBasket} amount={select.amount} sum={select.sum} />
+      <Head
+        title={select.language === 'ru' ? ruDictHead.headTitle : engDictHead.headTitle}
+        changeLanguage={callbacks.changeLanguage}
+        language={select.language}
+      />
+      <BasketTool
+        onOpen={callbacks.openModalBasket}
+        amount={select.amount}
+        sum={select.sum}
+        language={select.language}
+      />
       <List list={select.list} renderItem={renders.item} />
       <Pagination totalPage={5} totalItems={select.maxOrder} fetchProduct={fetchProduct} />
     </PageLayout>

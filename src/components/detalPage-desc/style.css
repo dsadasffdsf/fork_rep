@@ -1,0 +1,12 @@
+.DetalPageDesc {
+  padding: 0 21px 0 20px;
+}
+.DetalPageDesc p {
+  font-size: 18px;
+}
+.DetalPageDesc-text-bold {
+  font-weight: bold;
+}
+.DetalPageDesc-price {
+  font-size: 24px !important ;
+}

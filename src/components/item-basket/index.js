@@ -4,12 +4,16 @@ import { numberFormat } from '../../utils';
 import { cn as bem } from '@bem-react/classname';
 import PropTypes from 'prop-types';
 import './style.css';
+import { engDictBasket, ruDictBasket } from './dict';
 
 function ItemBasket(props) {
   const cn = bem('ItemBasket');
 
   const callbacks = {
-    onRemove: e => props.onRemove(props.item._id),
+    onRemove: (e) => {
+      e.preventDefault();
+      props.onRemove(props.item._id);
+    },
   };
 
   return (
@@ -18,9 +22,17 @@ function ItemBasket(props) {
       <div className={cn('title')}>{props.item.title}</div>
       <div className={cn('right')}>
         <div className={cn('cell')}>{numberFormat(props.item.price)} ₽</div>
-        <div className={cn('cell')}>{numberFormat(props.item.amount || 0)} шт</div>
         <div className={cn('cell')}>
-          <button onClick={callbacks.onRemove}>Удалить</button>
+          {numberFormat(props.item.amount || 0)}{' '}
+          {props.language === 'ru' ? ruDictBasket.basketBtnCount : engDictBasket.basketBtnCount}{' '}
+        </div>
+        <div className={cn('cell')}>
+          <button onClick={callbacks.onRemove}>
+            {' '}
+            {props.language === 'ru'
+              ? ruDictBasket.basketBtnDelete
+              : engDictBasket.basketBtnDelete}{' '}
+          </button>
         </div>
       </div>
     </div>

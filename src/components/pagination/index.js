@@ -3,31 +3,63 @@ import PropTypes from 'prop-types';
 import { cn as bem } from '@bem-react/classname';
 import './style.css';
 
-function Pagination({ totalPage, fetchProduct, totalItems }) {
-  console.log(totalItems);
-
+function Pagination({ fetchProduct, totalItems }) {
   const cn = bem('Pagination');
   const [currentPage, setCurrentPage] = useState(0);
-  const pagesToShow = Array.from({ length: 3 }, (_, index) => currentPage - 1 + index).filter(
-    (page) => page > 0 && page <= totalPage,
-  );
+  totalItems = Math.ceil(totalItems / 10);
   return (
     <div className={cn()}>
       <ul className={cn('list')}>
-        {pagesToShow.map((page) => (
-          <li
-            className={`${cn('element')} ${page === currentPage ? 'Pagination-element--current' : ''}`}
-            key={page}
-            onClick={() => {
-              fetchProduct(page);
-              setCurrentPage(page);
-              console.log(page);
-            }}>
-            {page}
-          </li>
-        ))}
-        <li className={cn('out')}>...</li>
-        <li className={cn('element')}>{totalItems}</li>
+        {Array.from({ length: totalItems }).map((_, index) => {
+          const isCurrentPage = index === currentPage;
+          const isNearCurrentPage = Math.abs(index - currentPage) <= 1;
+          const isFirstPage = index === 0;
+          const isLastPage = index === totalItems - 1;
+
+          // Для первого и последнего элемента
+          if (isFirstPage || isLastPage) {
+            return (
+              <li
+                className={`${cn('element')} ${isCurrentPage ? 'Pagination-element--current' : ''}`}
+                key={index}
+                onClick={() => {
+                  fetchProduct(index);
+                  setCurrentPage(index);
+                }}>
+                {index + 1}
+              </li>
+            );
+          }
+
+          // Для страниц рядом с текущей
+          if (isCurrentPage || isNearCurrentPage) {
+            return (
+              <li
+                className={`${cn('element')} ${isCurrentPage ? 'Pagination-element--current' : ''}`}
+                key={index}
+                onClick={() => {
+                  fetchProduct(index);
+                  setCurrentPage(index);
+                }}>
+                {index + 1}
+              </li>
+            );
+          }
+
+          // Для скрытых страниц добавляем многоточие
+          // Проверяем, не идет ли оно сразу после первой страницы или перед последней страницей
+          if (index === currentPage - 2 || index === currentPage + 2) {
+            return (
+              <li className={cn('out')} key={index}>
+                ...
+              </li>
+            );
+          }
+
+          return null;
+        })}
+        {/* <li className={cn('out')}>...</li>
+        <li className={cn('element')}>{totalItems}</li> */}
       </ul>
     </div>
   );
