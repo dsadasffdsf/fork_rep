@@ -46,8 +46,6 @@ function Pagination({ fetchProduct, totalItems }) {
             );
           }
 
-          // Для скрытых страниц добавляем многоточие
-          // Проверяем, не идет ли оно сразу после первой страницы или перед последней страницей
           if (index === currentPage - 2 || index === currentPage + 2) {
             return (
               <li className={cn('out')} key={index}>
