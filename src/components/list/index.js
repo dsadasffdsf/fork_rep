@@ -8,9 +8,9 @@ function List({ list, renderItem }) {
   return (
     <div className="List">
       {list.map(item => (
-        <Link to={`/products/${item._id}`} state={item._id} key={item._id}>
+        
           <div className="List-item">{renderItem(item)}</div>
-        </Link>
+
       ))}
     </div>
   );

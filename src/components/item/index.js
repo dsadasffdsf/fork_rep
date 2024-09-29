@@ -4,29 +4,30 @@ import { cn as bem } from '@bem-react/classname';
 import { numberFormat } from '../../utils';
 import './style.css';
 import { useLocalization } from '../../store/localization/localizetion-context';
+import { Link } from 'react-router-dom';
 
 function Item(props) {
   const cn = bem('Item');
   const { translation, language } = useLocalization();
 
   const callbacks = {
-    onAdd: (e) => {
+    onAdd: e => {
       e.preventDefault();
       props.onAdd(props.item._id);
     },
   };
 
   return (
-    <div className={cn()}>
-      {/*<div className={cn('code')}>{props.item._id}</div>*/}
-      <div className={cn('title')}>{props.item.title}</div>
-      <div className={cn('actions')}>
-        <div className={cn('price')}>{numberFormat(props.item.price)} ₽</div>
-        <button onClick={callbacks.onAdd}>
-        {translation[language].item.itemBtnAdd}
-        </button>
+    <Link to={`/products/${props.item._id}`} state={props.item._id} key={props.item._id}>
+      <div className={cn()}>
+        {/*<div className={cn('code')}>{props.item._id}</div>*/}
+        <div className={cn('title')}>{props.item.title}</div>
+        <div className={cn('actions')}>
+          <div className={cn('price')}>{numberFormat(props.item.price)} ₽</div>
+          <button onClick={callbacks.onAdd}>{translation[language].item.itemBtnAdd}</button>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

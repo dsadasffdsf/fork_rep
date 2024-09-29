@@ -5,6 +5,7 @@ import { cn as bem } from '@bem-react/classname';
 import PropTypes from 'prop-types';
 import './style.css';
 import { useLocalization } from '../../store/localization/localizetion-context';
+import { Link } from 'react-router-dom';
 
 function ItemBasket(props) {
   const cn = bem('ItemBasket');
@@ -23,20 +24,22 @@ function ItemBasket(props) {
   };
 
   return (
-    <div className={cn()} onClick={e => onCloseModal(e)}>
-      <div className={cn('title')}>{props.item.title}</div>
-      <div className={cn('right')}>
-        <div className={cn('cell')}>{numberFormat(props.item.price)} ₽</div>
-        <div className={cn('cell')}>
-          {numberFormat(props.item.amount || 0)} {translation[language].basket.basketBtnCount}
-        </div>
-        <div className={cn('cell')}>
-          <button onClick={callbacks.onRemove}>
-            {translation[language].basket.basketBtnDelete}
-          </button>
+    <Link to={`/products/${props.item._id}`} state={props.item._id} key={props.item._id}>
+      <div className={cn()} onClick={e => onCloseModal(e)}>
+        <div className={cn('title')}>{props.item.title}</div>
+        <div className={cn('right')}>
+          <div className={cn('cell')}>{numberFormat(props.item.price)} ₽</div>
+          <div className={cn('cell')}>
+            {numberFormat(props.item.amount || 0)} {translation[language].basket.basketBtnCount}
+          </div>
+          <div className={cn('cell')}>
+            <button onClick={callbacks.onRemove}>
+              {translation[language].basket.basketBtnDelete}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 

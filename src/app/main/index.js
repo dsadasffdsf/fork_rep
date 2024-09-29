@@ -50,9 +50,7 @@ function Main() {
   const { translation, language } = useLocalization();
   return (
     <PageLayout>
-      <Head
-        title={translation[language].head.headTitle}
-      />
+      <Head title={translation[language].head.headTitle} />
       <BasketTool
         onOpen={callbacks.openModalBasket}
         amount={select.amount}
