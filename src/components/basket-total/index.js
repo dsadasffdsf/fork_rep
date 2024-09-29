@@ -3,17 +3,15 @@ import PropTypes from 'prop-types';
 import { cn as bem } from '@bem-react/classname';
 import { numberFormat } from '../../utils';
 import './style.css';
-import { engDictBasket, ruDictBasket } from './dict';
+import { useLocalization } from '../../store/localization/localizetion-context';
 
-function BasketTotal({ sum, language }) {
-  // console.log(language);
+function BasketTotal({ sum }) {
+  const { translation, language } = useLocalization();
 
   const cn = bem('BasketTotal');
   return (
     <div className={cn()}>
-      <span className={cn('cell')}>
-        {language === 'ru' ? ruDictBasket.basketTotalPrice : engDictBasket.basketTotalPrice}
-      </span>
+      <span className={cn('cell')}>{translation[language].basket.basketTotalPrice}</span>
       <span className={cn('cell')}> {numberFormat(sum)} ₽</span>
       <span className={cn('cell')}></span>
     </div>

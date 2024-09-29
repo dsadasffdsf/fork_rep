@@ -3,7 +3,7 @@ import './style.css';
 import { cn as bem } from '@bem-react/classname';
 
 function DetalPageLayout({ children }) {
-  const cn = bem('DetalPageLayout');
+  const cn = bem('detal-pageLayout');
   return (
     <>
       <div className={cn()}>{children}</div>

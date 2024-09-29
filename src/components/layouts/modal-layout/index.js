@@ -2,7 +2,7 @@ import { memo, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { cn as bem } from '@bem-react/classname';
 import './style.css';
-import { engDictBasket, ruDictBasket } from './dict';
+import { useLocalization } from '../../../store/localization/localizetion-context';
 
 function ModalLayout(props) {
   const cn = bem('ModalLayout');
@@ -10,6 +10,7 @@ function ModalLayout(props) {
   // Корректировка центра, если модалка больше окна браузера.
   const layout = useRef();
   const frame = useRef();
+  const { translation, language } = useLocalization();
   useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
       // Центрирование frame или его прижатие к краю, если размеры больше чем у layout
@@ -25,13 +26,20 @@ function ModalLayout(props) {
     };
   }, []);
 
+  const handleClickOutside = event => {
+    // Проверяем, что клик был за пределами модального контента (frame)
+    if (layout.current && event.target === layout.current) {
+      props.onClose();
+    }
+  };
+
   return (
-    <div className={cn()} ref={layout}>
+    <div className={cn()} ref={layout} onClick={handleClickOutside}>
       <div className={cn('frame')} ref={frame}>
         <div className={cn('head')}>
           <h1 className={cn('title')}>{props.title}</h1>
           <button className={cn('close')} onClick={props.onClose}>
-            {props.language === 'ru' ? ruDictBasket.basketBtnClose : engDictBasket.basketBtnClose}{' '}
+          {translation[language].basket.basketBtnClose}
           </button>
         </div>
         <div className={cn('content')}>{props.children}</div>

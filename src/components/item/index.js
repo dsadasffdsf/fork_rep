@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { cn as bem } from '@bem-react/classname';
 import { numberFormat } from '../../utils';
 import './style.css';
-import { engDictItem, ruDictItem } from './dict';
+import { useLocalization } from '../../store/localization/localizetion-context';
 
 function Item(props) {
   const cn = bem('Item');
+  const { translation, language } = useLocalization();
 
   const callbacks = {
     onAdd: (e) => {
@@ -22,7 +23,7 @@ function Item(props) {
       <div className={cn('actions')}>
         <div className={cn('price')}>{numberFormat(props.item.price)} ₽</div>
         <button onClick={callbacks.onAdd}>
-          {props.language === 'ru' ? ruDictItem.itemBtnAdd : engDictItem.itemBtnAdd}
+        {translation[language].item.itemBtnAdd}
         </button>
       </div>
     </div>

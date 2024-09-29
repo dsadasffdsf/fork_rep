@@ -1,7 +1,7 @@
 import Main from './main';
-import { Route, Routes } from 'react-router-dom';
-import DetalPage from './detalPage';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './Layout';
+import DetalPage from './detal-page';
 
 /**
  * Приложение
@@ -12,8 +12,9 @@ function App() {
     <>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Main />}></Route>
+          <Route path="/" element={<Navigate to="/page/1" replace />} />
           <Route path="/products/:id" element={<DetalPage />}></Route>
+          <Route path="/page/:page?" element={<Main />}></Route>
         </Route>
       </Routes>
     </>

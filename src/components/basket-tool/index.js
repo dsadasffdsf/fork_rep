@@ -3,39 +3,27 @@ import PropTypes from 'prop-types';
 import { cn as bem } from '@bem-react/classname';
 import { numberFormat, plural } from '../../utils';
 import './style.css';
-import { Link } from 'react-router-dom';
-import { engDictBasketTool, ruDictBasketTool } from './dict';
+import NavMenu from '../nav-menu';
+import { useLocalization } from '../../store/localization/localizetion-context';
 
-function BasketTool({ sum, amount, onOpen, language }) {
+function BasketTool({ sum, amount, onOpen }) {
   const cn = bem('BasketTool');
+  const { translation, language } = useLocalization();
   return (
     <div className={cn('wrapper')}>
-      <Link to="/">
-        <span className={cn('wrapper-redirect')}>
-          {language === 'ru'
-            ? ruDictBasketTool.basketToolToHome
-            : engDictBasketTool.basketToolToHome}
-        </span>
-      </Link>
+      <NavMenu />
       <div className={cn()}>
-        <span className={cn('label')}>
-          {' '}
-          {language === 'ru' ? ruDictBasketTool.basketToolTitle : engDictBasketTool.basketToolTitle}
-        </span>
+        <span className={cn('label')}>{translation[language].basketTool.basketToolTitle}</span>
         <span className={cn('total')}>
           {amount
             ? `${amount} ${plural(amount, {
-                one: `${language === 'ru' ? ruDictBasketTool.basketToolOneProduct : engDictBasketTool.basketToolOneProduct}`,
-                few: `${language === 'ru' ? ruDictBasketTool.basketToolFewProduct : engDictBasketTool.basketToolManyProducts}`,
-                many: `${language === 'ru' ? ruDictBasketTool.basketToolManyProducts : engDictBasketTool.basketToolManyProducts}`,
+                one: translation[language].basketTool.basketToolOneProduct,
+                few: translation[language].basketTool.basketToolFewProduct,
+                many: translation[language].basketTool.basketToolManyProducts,
               })} / ${numberFormat(sum)} ₽`
-            : `${language === 'ru' ? ruDictBasketTool.basketToolStatus : engDictBasketTool.basketToolStatus}`}
+            : `${translation[language].basketTool.basketToolStatus}`}
         </span>
-        <button onClick={onOpen}>
-          {language === 'ru'
-            ? ruDictBasketTool.basketToolBtnOpen
-            : engDictBasketTool.basketToolBtnOpen}
-        </button>
+        <button onClick={onOpen}>{translation[language].basketTool.basketToolBtnOpen}</button>
       </div>
     </div>
   );

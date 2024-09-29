@@ -6,7 +6,7 @@ class Basket extends StoreModule {
       list: [],
       sum: 0,
       amount: 0,
-      maxOrder: 0,
+      maxCountProducts: 0,
     };
   }
 
@@ -17,11 +17,16 @@ class Basket extends StoreModule {
   addToBasket(_id) {
     let sum = 0;
     // Ищем товар в корзине, чтобы увеличить его количество
+    const combinedList = [
+      ...this.store.getState().detalProduct.list,
+      ...this.store.getState().catalog.list,
+    ];
 
     let exist = false;
-    // console.log(this.getState());
+    // console.log(this.store.getState().detalProduct.list);
+    // console.log(this.store.getState().catalog.list);
 
-    const list = this.getState().list.map((item) => {
+    const list = this.getState().list.map(item => {
       let result = item;
 
       if (item._id === _id) {
@@ -37,12 +42,13 @@ class Basket extends StoreModule {
       // Поиск товара в каталоге, чтобы его добавить в корзину.
       // @todo В реальном приложении будет запрос к АПИ вместо поиска по состоянию.
       // console.log(this.store.getState() ,"get state ----------");
-      
-      const item = this.store.getState().catalog.list.find((item) => item._id === _id);
+
+      const item = combinedList.find(item => item._id === _id);
       list.push({ ...item, amount: 1 }); // list уже новый, в него можно пушить.
       // Добавляем к сумме.
-      // console.log(item);
-      
+      // console.log(item, 'item---------');
+      // console.log(item.price, 'price---------');
+
       sum += item.price;
     }
 
@@ -63,7 +69,7 @@ class Basket extends StoreModule {
    */
   removeFromBasket(_id) {
     let sum = 0;
-    const list = this.getState().list.filter((item) => {
+    const list = this.getState().list.filter(item => {
       if (item._id === _id) return false;
       sum += item.price * item.amount;
       return true;

@@ -6,13 +6,13 @@ body {
 }
 a {
   text-decoration: none;
-  color: #535353;
+  color: #000;
 }
 a:visited {
-  color: #535353;
+  color: #000;
 }
 
-.DetalPageLayout {
+.detal-pageLayout {
   /* padding: 0px 21px 0px 20px; */
   max-width: 1024px;
   min-height: 100vh;

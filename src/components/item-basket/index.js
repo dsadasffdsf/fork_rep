@@ -4,34 +4,35 @@ import { numberFormat } from '../../utils';
 import { cn as bem } from '@bem-react/classname';
 import PropTypes from 'prop-types';
 import './style.css';
-import { engDictBasket, ruDictBasket } from './dict';
+import { useLocalization } from '../../store/localization/localizetion-context';
 
 function ItemBasket(props) {
   const cn = bem('ItemBasket');
+  const { translation, language } = useLocalization();
 
   const callbacks = {
-    onRemove: (e) => {
+    onRemove: e => {
       e.preventDefault();
       props.onRemove(props.item._id);
     },
   };
+  const onCloseModal = e => {
+    if (e.target.closest('button') === null) {
+      props.onClose();
+    }
+  };
 
   return (
-    <div className={cn()}>
-      {/*<div className={cn('code')}>{props.item._id}</div>*/}
+    <div className={cn()} onClick={e => onCloseModal(e)}>
       <div className={cn('title')}>{props.item.title}</div>
       <div className={cn('right')}>
         <div className={cn('cell')}>{numberFormat(props.item.price)} ₽</div>
         <div className={cn('cell')}>
-          {numberFormat(props.item.amount || 0)}{' '}
-          {props.language === 'ru' ? ruDictBasket.basketBtnCount : engDictBasket.basketBtnCount}{' '}
+          {numberFormat(props.item.amount || 0)} {translation[language].basket.basketBtnCount}
         </div>
         <div className={cn('cell')}>
           <button onClick={callbacks.onRemove}>
-            {' '}
-            {props.language === 'ru'
-              ? ruDictBasket.basketBtnDelete
-              : engDictBasket.basketBtnDelete}{' '}
+            {translation[language].basket.basketBtnDelete}
           </button>
         </div>
       </div>
