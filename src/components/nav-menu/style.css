@@ -1,0 +1,12 @@
+.Nav-menu {
+  padding: 10px 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.Nav-menu-username {
+  margin-right: 20px;
+}
+.Nav-menu-username{
+  display: block;
+}

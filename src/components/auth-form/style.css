@@ -1,0 +1,14 @@
+.Auth-form {
+  padding-left: 20px;
+}
+.Auth-form-title-input {
+  margin-bottom: 0;
+}
+.Auth-form-btn {
+  display: block;
+  margin-top: 19px;
+}
+.Auth-form-error {
+  margin-top: 20px;
+  color: red;
+}

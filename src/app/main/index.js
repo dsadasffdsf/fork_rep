@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import useStore from '../../hooks/use-store';
 import useTranslate from '../../hooks/use-translate';
 import useInit from '../../hooks/use-init';
@@ -18,6 +18,7 @@ function Main() {
   useInit(
     () => {
       store.actions.catalog.initParams();
+      store.actions.catalog.setCategory();
     },
     [],
     true,
@@ -27,10 +28,12 @@ function Main() {
 
   return (
     <PageLayout>
-      <Head title={t('title')}>
-        <LocaleSelect />
-      </Head>
-      <Navigation />
+      <Navigation>
+        <Head title={t('title')}>
+          <LocaleSelect />
+        </Head>
+      </Navigation>
+
       <CatalogFilter />
       <CatalogList />
     </PageLayout>

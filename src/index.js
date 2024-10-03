@@ -4,6 +4,7 @@ import { StoreContext } from './store/context';
 import { I18nProvider } from './i18n/context';
 import App from './app';
 import Store from './store';
+import {  AuthProvider } from './store/auth/auth-provider';
 
 const store = new Store();
 
@@ -13,9 +14,11 @@ const root = createRoot(document.getElementById('root'));
 root.render(
   <StoreContext.Provider value={store}>
     <I18nProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <AuthProvider >
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AuthProvider>
     </I18nProvider>
   </StoreContext.Provider>,
 );

@@ -21,7 +21,7 @@ function Article() {
   const params = useParams();
 
   useInit(() => {
-    store.actions.article.load(params.id);
+    store.actions.article.fetchAuth();
   }, [params.id]);
 
   const select = useSelector(state => ({
@@ -38,10 +38,12 @@ function Article() {
 
   return (
     <PageLayout>
-      <Head title={select.article.title}>
-        <LocaleSelect />
-      </Head>
-      <Navigation />
+      <Navigation>
+        <Head title={select.article.title}>
+          <LocaleSelect />
+        </Head>
+      </Navigation>
+
       <Spinner active={select.waiting}>
         <ArticleCard article={select.article} onAdd={callbacks.addToBasket} t={t} />
       </Spinner>
