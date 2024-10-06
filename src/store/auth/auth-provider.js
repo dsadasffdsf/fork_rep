@@ -10,13 +10,10 @@ export const AuthProvider = ({ children }) => {
     // console.log('AuthProvider');
     // console.log(store.actions.auth.fetchAuthByToken);
 
-    // У подобных контекст отваливается  const fetchAuthByToken = store.actions.auth.fetchAuthByToken;
+    // У подобных контекст отваливается const fetchAuthByToken = store.actions.auth.fetchAuthByToken;
     const fetchAuthByToken = () => store.actions.auth.fetchAuthByToken();
+    fetchAuthByToken();
 
-    const token = localStorage.getItem('X-Token');
-    if (token) {
-      fetchAuthByToken();
-    }
   }, []);
 
   return <AuthContext.Provider>{children}</AuthContext.Provider>;

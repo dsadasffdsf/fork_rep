@@ -13,15 +13,15 @@ function Profile() {
   const navigate = useNavigate();
 
   const select = useSelector(state => ({
-    dto: state.auth.dto,
+    dto: state.profile.dto,
+    isAuth: state.auth.isAuth,
   }));
 
   useEffect(() => {
-    const token = localStorage.getItem('X-Token');
-    if (!token) {
+    if (!select.isAuth) {
       navigate('/login');
     }
-  }, [navigate]);
+  }, [select.isAuth]);
 
   const { t } = useTranslate();
 

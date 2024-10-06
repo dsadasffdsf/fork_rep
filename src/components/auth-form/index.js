@@ -2,22 +2,15 @@ import React, { useRef, useState } from 'react';
 import './style.css';
 import { useNavigate } from 'react-router-dom';
 
-function AuthForm({ fetch }) {
-  const navigate = useNavigate();
+function AuthForm({ fetch, errorAuth }) {
   const login = useRef(null);
   const password = useRef(null);
-  const [error, setError] = useState('');
+
   const submitHandler = async e => {
     e.preventDefault();
-    console.log(login.current.value);
-    console.log(password.current.value);
-    const res = await fetch(login.current.value, password.current.value);
-    console.log(res);
-    if (res === 'ok') {
-      navigate('/profile');
-    } else {
-      setError(res);
-    }
+    // console.log(login.current.value);
+    // console.log(password.current.value);
+    fetch(login.current.value, password.current.value);
   };
 
   return (
@@ -28,7 +21,7 @@ function AuthForm({ fetch }) {
         <input type="text" ref={login} />
         <p className="Auth-form-title-input">Пароль</p>
         <input type="text" ref={password} />
-        <div className="Auth-form-error">{error}</div>
+        <div className="Auth-form-error">{errorAuth}</div>
         <button className="Auth-form-btn" type="submit">
           Войти
         </button>

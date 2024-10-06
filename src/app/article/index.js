@@ -19,9 +19,10 @@ function Article() {
 
   // Параметры из пути /articles/:id
   const params = useParams();
-
+  // console.log(store.actions.article,"-------");
+  
   useInit(() => {
-    store.actions.article.fetchAuth();
+    store.actions.article.load(params.id);
   }, [params.id]);
 
   const select = useSelector(state => ({

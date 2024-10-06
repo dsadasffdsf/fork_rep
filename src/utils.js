@@ -33,3 +33,43 @@ export function codeGenerator(start = 0) {
 export function numberFormat(value, locale = 'ru-RU', options = {}) {
   return new Intl.NumberFormat(locale, options).format(value);
 }
+
+
+export function buildCategoryTree(items) {
+  const tree = [];
+  const map = {};
+  const categories = [{ value: 'all', title: 'Все' }]; // Первый элемент - "Все"
+
+  // Создаем мапу, где ключом является id категории
+  items.forEach(item => {
+    map[item._id] = { ...item, children: [] };
+  });
+
+  // Строим дерево категорий
+  items.forEach(item => {
+    if (item.parent) {
+      const parentId = item.parent._id;
+      if (map[parentId]) {
+        map[parentId].children.push(map[item._id]);
+      }
+    } else {
+      tree.push(map[item._id]);
+    }
+  });
+
+  // Рекурсивная функция для  итерации по дереву с добавлением префиксов
+  function flattenTree(tree, prefix = '') {
+    tree.forEach(node => {
+      categories.push({ value: node._id, title: `${prefix} ${node.title}`.trim() });
+
+      if (node.children.length > 0) {
+        flattenTree(node.children, `${prefix} -`);
+      }
+    });
+  }
+
+  // Итерация по дереву и добавление категорий с вложенностью
+  flattenTree(tree);
+
+  return categories;
+}

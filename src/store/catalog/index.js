@@ -1,3 +1,4 @@
+import { buildAndFlattenCategoryTree, buildCategoryTree } from '../../utils';
 import StoreModule from '../module';
 
 /**
@@ -45,7 +46,7 @@ class CatalogState extends StoreModule {
       // console.log(categoryValue, 'categoryValue------------------');
 
       if (categoryValue !== 'all') {
-        validParams.category =  urlParams.get('category');
+        validParams.category = urlParams.get('category');
       }
     }
 
@@ -125,51 +126,10 @@ class CatalogState extends StoreModule {
   }
   async setCategory() {
     const response = await fetch(`/api/v1/categories?fields=title,parent(title)`);
-    const categories = [];
+
     const data = await response.json();
-    categories.push({ value: 'all', title: 'Все' });
+    const categories = buildCategoryTree(data.result.items);
 
-    // Функция для создания дерева категорий
-    function buildCategoryTree(items) {
-      const tree = [];
-      const map = {};
-
-      // Создаем мапу, где ключом является id категории
-      items.forEach(item => {
-        map[item._id] = { ...item, children: [] };
-      });
-
-      // Строим дерево категорий
-      items.forEach(item => {
-        if (item.parent) {
-          const parentId = item.parent._id;
-          if (map[parentId]) {
-            map[parentId].children.push(map[item._id]);
-          }
-        } else {
-          tree.push(map[item._id]);
-        }
-      });
-
-      return tree;
-    }
-
-    // Функция для "плоской" итерации по дереву с добавлением префиксов (вложенность)
-    function flattenTree(tree, prefix = '') {
-      tree.forEach(node => {
-        categories.push({ value: node._id, title: `${prefix}${node.title}` });
-
-        if (node.children.length > 0) {
-          flattenTree(node.children, `${prefix}-`); // Увеличиваем вложенность
-        }
-      });
-    }
-
-    // Строим дерево категорий
-    const categoryTree = buildCategoryTree(data.result.items);
-
-    // Плоская итерация по дереву и добавление категорий с вложенностью
-    flattenTree(categoryTree);
     this.setState(
       {
         ...this.getState(),

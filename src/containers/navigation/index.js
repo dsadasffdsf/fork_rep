@@ -18,16 +18,11 @@ function Navigation({ children }) {
     amount: state.basket.amount,
     sum: state.basket.sum,
     lang: state.locale.lang,
-    username: state.auth.dto.name,
+    username: state.profile.dto.name,
+    isAuth: state.auth.isAuth,
   }));
 
 
-  const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem('X-Token');
-    setToken(token);
-  }, [store, navigate]);
 
   const callbacks = {
     // Открытие модалки корзины
@@ -47,9 +42,7 @@ function Navigation({ children }) {
     }, []),
     onLogout: useCallback(() => {
       store.actions.auth.fetchDelAuthToken();
-      localStorage.removeItem('X-Token');
-      setToken(null);
-      navigate('/login');
+
     }, []),
   };
 
@@ -62,7 +55,7 @@ function Navigation({ children }) {
 
   return (
     <>
-      {token ? (
+      {select.isAuth ? (
         <NavMenu onNavigate={callbacks.onLogout} btnTitle={'Выход'} username={select.username} />
       ) : (
         <NavMenu onNavigate={callbacks.onAuth} btnTitle={'Вход'} />

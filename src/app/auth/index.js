@@ -8,6 +8,7 @@ import AuthForm from '../../components/auth-form';
 import useStore from '../../hooks/use-store';
 
 import { useNavigate } from 'react-router-dom';
+import useSelector from '../../hooks/use-selector';
 
 function Auth() {
   const store = useStore();
@@ -18,17 +19,20 @@ function Auth() {
       (login, password) => store.actions.auth.fetchAuth({ login, password }),
       [store],
     ),
-    onProfile: useCallback(() => {
-      navigate('/profile');
-    }, []),
+    // onProfile: useCallback(() => {
+    //   navigate('/profile');
+    // }, []),
   };
+  const select = useSelector(state => ({
+    isAuth: state.auth.isAuth,
+    errorAuth: state.auth.errorAuth,
+  }));
 
   useEffect(() => {
-    const token = localStorage.getItem('X-Token');
-    if (token) {
+    if (select.isAuth) {
       navigate('/profile');
     }
-  }, [navigate, store, callbacks]);
+  }, [select.isAuth]);
 
   const { t } = useTranslate();
 
@@ -39,7 +43,7 @@ function Auth() {
           <LocaleSelect />
         </Head>
       </Navigation>
-      <AuthForm fetch={callbacks.fetchAuth} />
+      <AuthForm fetch={callbacks.fetchAuth} errorAuth={select.errorAuth} />
     </PageLayout>
   );
 }
