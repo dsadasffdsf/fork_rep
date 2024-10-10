@@ -3,7 +3,7 @@ import StoreModule from '../module';
 /**
  * Детальная ифнормация о товаре для страницы товара
  */
-class ArticleState extends StoreModule {
+class CommentsState extends StoreModule {
   initState() {
     return {
       data: {},
@@ -19,13 +19,13 @@ class ArticleState extends StoreModule {
   // async load(id) {
   //   // Сброс текущего товара и установка признака ожидания загрузки
   //   this.setState({
-  //     data: {},
+  //     data: [],
   //     waiting: true,
   //   });
 
   //   try {
   //     const res = await this.services.api.request({
-  //       url: `/api/v1/articles/${id}?fields=*,madeIn(title,code),category(title)`,
+  //       url: `/api/v1/comments?fields=items(_id,text,dateCreate,author(profile(name)),parent(_id,_type),isDeleted),count&limit=*&search[parent]=${id}`,
   //     });
 
   //     // Товар загружен успешно
@@ -47,4 +47,4 @@ class ArticleState extends StoreModule {
   // }
 }
 
-export default ArticleState;
+export default CommentsState;

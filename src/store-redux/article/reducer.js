@@ -1,6 +1,7 @@
 // Начальное состояние
 export const initialState = {
   data: {},
+
   waiting: false, // признак ожидания загрузки
 };
 
@@ -11,6 +12,8 @@ function reducer(state = initialState, action) {
       return { ...state, data: {}, waiting: true };
 
     case 'article/load-success':
+      // console.log("dddddddddddddd");
+      
       return { ...state, data: action.payload.data, waiting: false };
 
     case 'article/load-error':
